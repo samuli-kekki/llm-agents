@@ -25,18 +25,22 @@ SOFTWARE.
 from typing import List
 from agent_types import Agent
 
-def agent_loop(agents: List[Agent], max_turns = 7):
+def agent_loop(agents: List[Agent], max_iterations = 7):
+    """A function that makes agents to talk to each other
+    by giving the response from previous agent as the input
+    to the next agent. Runs for certain number of iterations."""
+
     if len(agents) < 2:
         print("we need at least two agents.")
         return
     
     # When calling Anthropic API
     # we need at least one user message.
-    # Use first_message from second agent
+    # Use first_message from second agent as the input
     # when calling the first agent for the first time.
     previous_agent_response_str = agents[1].first_message
 
-    for turns in range(max_turns):
+    for _ in range(max_iterations):
         for agent in agents:
             response = agent.turn(previous_agent_response_str)
             previous_agent_response_str = response.content if response else None

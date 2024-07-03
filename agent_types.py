@@ -28,7 +28,7 @@ from typing import NamedTuple, List, Optional
 import os
 
 class Message(NamedTuple):
-    """Encapsulates of the messages to send to the LLM.
+    """Encapsulates the messages to send to the LLM.
 
     Attributes:
         role (str): Role of the message
@@ -112,8 +112,10 @@ class Claude(LLM):
 
             if not isinstance(response.content, list):
                 return None
+
             if len(response.content) == 0:
-                return None            
+                return None
+      
             content = response.content[0].text
             if "empty string" in content:
                 return None
@@ -124,7 +126,7 @@ class Claude(LLM):
         return None
 
 class Agent:
-    """A simple 'agent' that simply uses previous agent's
+    """A simple 'agent' that uses previous agent's
     response as the input for itself.
     
     Attributes:
