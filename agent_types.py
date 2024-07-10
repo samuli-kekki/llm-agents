@@ -22,10 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import anthropic
 from abc import ABC, abstractmethod
 from typing import NamedTuple, List, Optional
-import os
 
 class Message(NamedTuple):
     """Encapsulates the messages to send to the LLM.
@@ -68,62 +66,6 @@ class LLM(ABC):
         """
 
         pass
-
-class Claude(LLM):
-    """A wrapper for Claude SDK.
-    Helps with sending a list of messages to Claude
-    and handling the response."""
-
-    def __init__(self):
-        api_key = os.environ.get("ANTHROPIC_API_KEY")
-        if not api_key:
-            raise KeyError("ANTHROPIC_API_KEY environment variable not found")
-        # Anthropic client attempts to reads ANTHROPIC_API_KEY too
-        # but I added a check to make it clear for the reader that it is needed.
-        self.client = anthropic.Anthropic(api_key=api_key)
-
-    def predict(self, input: LLMInput) -> Optional[Message]:
-        """Call Claude API with input to get a response.
-        
-        Args:
-            input (LLMInput): Payload to send to Claude API,
-                Consists of system prompt and a list of messages.
-        
-        Returns:
-            Optional[Message]: Response from Claude as Message,
-                or None, if Claude decided to not return a response
-                based on the system prompt."""
-
-        try:
-            messages_dict = [message._asdict() for message in input.messages]
-
-            response = self.client.messages.create(
-                model="claude-3-5-sonnet-20240620",
-                max_tokens=1024,
-                system=input.system,
-                messages=messages_dict
-            )
-
-            if not response:
-                return None
-            
-            if response.role != "assistant":
-                print(f"Warning: response role is not assistant: {response.role}")
-
-            if not isinstance(response.content, list):
-                return None
-
-            if len(response.content) == 0:
-                return None
-      
-            content = response.content[0].text
-            if "empty string" in content:
-                return None
-
-            return Message(response.role, content)
-        except Exception as err:
-            print(f"Exception when calling Claude API: {err}")
-        return None
 
 class Agent:
     """A simple 'agent' that uses previous agent's

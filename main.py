@@ -22,18 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from agent_types import Agent, Claude
+from agent_types import Agent
+from claude import Claude
+from chatgpt import ChatGPT
 from orchestration import agent_loop
 import roles
 
 claude = Claude()
+chatgpt = ChatGPT()
 
 shopkeeper = Agent(claude,
     "Shopkeeper",
     roles.shopkeeper_system_message,
     roles.shopkeeper_first_message)
 
-customer = Agent(claude,
+customer = Agent(chatgpt,
     "Customer",
     roles.customer_system_message,
     roles.customer_first_message)
