@@ -1,10 +1,10 @@
-# Claude Agents
+# LLM Agents
 
-This repository contains code that puts two or more instances of very simple Claude "agents" to message each other. An agent in this case is simply the message history of the agent.
+This repository contains code that puts two or more instances of very simple LLM "agents" to message each other. An agent in this case is simply the message history of the agent.
 
-The goal of the repository was to learn about the Anthropic SDK.
+The goal of the repository was to learn about the ChatGPT and Anthropic SDKs, and put two different LLMs against each other.
 
-To run, please install the dependencies (Anthropic SDK) and run main.py.
+To run, please install the dependencies (OpenAI and Anthropic SDKs) and run main.py.
 
 With the default settings the agents act as a shopkeeper of an ice cream truck and the customer.
 
